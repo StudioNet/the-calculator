@@ -1,0 +1,40 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "Learn & Ilustrate RxJS & AngularJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StudioNet/the-calculator.git"
+  },
+  "keywords": [
+    "RxJS",
+    "Flux",
+    "AngularJS",
+    "Immutable",
+    "Data",
+    "Observables",
+    "Frontend",
+    "Trainings"
+  ],
+  "author": "Evgeny Yurovitsky",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/StudioNet/the-calculator/issues"
+  },
+  "homepage": "https://github.com/StudioNet/the-calculator#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-print": "^2.0.1",
+    "gulp-rollup": "^2.11.0",
+    "gulp-webserver": "^0.9.1"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.23.0",
+    "systemjs": "^0.20.12"
+  }
+}
