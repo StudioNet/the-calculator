@@ -1,2 +1,2 @@
 # the-calculator
-Learn &amp; Ilustrate RxJS &amp; AngularJS
+Learn & Ilustrate RxJS & AngularJS, Flux with Immutable data collection etc.
