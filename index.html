@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Exam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8"/>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+</head>
+<body>
+<div class="jumb vertical-center">
+    <div class="container calculator">
+
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="header-text">Calculator</h1> 
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label class="radio-inline">
+                    <input id="standard" type="radio" name="calculatorType" checked="checked"/>Standard
+                </label>
+                <label class="radio-inline">
+                    <input id="scientific" type="radio" name="calculatorType"/>Scientific
+                </label>
+                <label class="radio-inline">
+                    <input id="programmer" type="radio" name="calculatorType"/>Programmer
+                </label> 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-inline calc-form">
+                    <div class="form-group">
+                        <input type="text" id="leftOperand" class="form-control"/> 
+                    </div>
+                    <div class="form-group">
+                        <select id="operations" class="form-control"></select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="rightOperand" class="form-control" /> 
+                    </div>
+                    <div class="form-group">
+                        = <span id="txtResult" class="form-control"></span>
+                    </div>
+                </form>
+           </div>
+        </div>
+    </div>
+</div> 
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/modernizr-2.8.3.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script>
+<script type="text/javascript" src="/dist/app.js"></script>
+<script type="text/javascript" src="/app/observer.js"></script>
+<script type="text/javascript" src="/app/types.js"></script>
+<script type="text/javascript" src="/app/operators.js"></script>
+<script type="text/javascript" src="/app/calculator.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var operatorsListView = Operators.Views.ListView.create(Operators.Model, { list: $("#operations") });
+        var operatorsController = Operators.Controller.create(Operators.Model, operatorsListView);
+        
+        var typesModel = Types.Model.create(Operators.Model);
+        var typesView = new Types.View.create(typesModel, {
+            standard: $("#standard"),
+            scientific: $("#scientific"),
+            programmer: $("#programmer")
+        });
+
+        var typesController = Types.Controller.create(typesModel, typesView, operatorsController);
+
+        var calculatorModel = Calculator.Model.create(typesModel);
+        var calculatorView = Calculator.View.create(calculatorModel, {
+            leftOperand: $("#leftOperand"),
+            rightOperand: $("#rightOperand"),
+            result: $("#txtResult"),
+            operations: $("#operations")
+        });
+
+        Calculator.Controller.create(calculatorModel, calculatorView, operatorsController);
+        operatorsListView.show(); 
+    }); 
+</script>
+
+</body>
+</html>
