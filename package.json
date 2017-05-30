@@ -14,11 +14,9 @@
     "RxJS",
     "Flux",
     "AngularJS",
-    "Immutable",
-    "Data",
+    "Immutable Data",
     "Observables",
-    "Frontend",
-    "Trainings"
+    "Frontend Trainings"
   ],
   "author": "Evgeny Yurovitsky",
   "license": "MIT",

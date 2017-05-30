@@ -1,6 +1,5 @@
 module.exports = function (rootFolder) {
-    var self = this;
-
+    let self = this;
     let root = rootFolder || '';
     let index = root + '/index.html';
     let app = root + "/app/";
@@ -8,9 +7,9 @@ module.exports = function (rootFolder) {
     let dist = root + '/build/';
 
     self.assets = {
-        css: assets + 'css/',
-        images: assets + 'imgs/',
-        fonts: assets + 'fonts/'
+        css: assets + 'css/**/*.css',
+        images: assets + 'imgs/**/*.{jpg,png,gif}',
+        fonts: assets + 'fonts/**/*.{ttf,woff,eot,svg,woff2}'
     };
 
     self.index = index;
@@ -28,7 +27,10 @@ module.exports = function (rootFolder) {
         path: dist,
         app: dist + 'app/',
         libs: dist + 'libs/',
-        assets: dist + 'assets/'
+        assets: {
+            css: dist + 'assets/css/',
+            fonts: dist + 'assets/fonts/'
+        }
     };
 
     return self;

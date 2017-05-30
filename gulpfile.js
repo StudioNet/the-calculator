@@ -6,7 +6,10 @@ var concat = require('gulp-concat');
 var print = require('gulp-print');
 var webserver = require('gulp-webserver');
 var appConfig = require('./gulps/gulp.config')('.');
-var buildProcess = require('./gulps/build.process');
+var BuildProcess = require('./gulps/build.process');
+
+//initialize build process helper
+var buildProcess = new BuildProcess(appConfig);
 
 gulp.task('config:paths', function () {
     console.info('Assets paths: ');
@@ -29,9 +32,10 @@ gulp.task('config:paths', function () {
     console.info(appConfig.build.path);
     console.info(appConfig.build.libs);
     console.info(appConfig.build.app);
+    console.info(appConfig.build.assets.css);
+    console.info(appConfig.build.assets.fonts);
     console.info('-------End--------');
 });
-
 
 gulp.task('copy:index', function () {
     return gulp.src(appConfig.index)
@@ -45,6 +49,18 @@ gulp.task('copy:libs', function () {
         .pipe(gulp.dest(appConfig.build.libs));
 });
 
+gulp.task('copy:css', function() {
+    return gulp.src(appConfig.assets.css)
+                .pipe(print())
+                .pipe(gulp.dest(appConfig.build.assets.css))
+});
+
+gulp.task('copy:fonts', function() {
+    return gulp.src(appConfig.assets.fonts)
+                .pipe(print())
+                .pipe(gulp.dest(appConfig.build.assets.fonts))
+});
+
 gulp.task('copy:appjs', function () {
     return gulp.src(appConfig.src.code.appjs)
         .pipe(print())
@@ -52,14 +68,19 @@ gulp.task('copy:appjs', function () {
 });
 
 gulp.task('build:clean', function () {
-    new buildProcess(appConfig).clean();
+    buildProcess.clean();
 });
 
-gulp.task('build:dev', ['build:clean', 'copy:index', 'copy:libs', 'copy:appjs']);
+gulp.task('build:dev', ['build:clean', 'copy:index', 'copy:libs', 'copy:appjs', 'copy:css', 'copy:fonts']);
 
 gulp.task('serve:dev', ['build:dev'], function () {
     gulp.src(appConfig.build.path)
-        .pipe(webserver({ open: true }));
+        .pipe(webserver({ 
+            livereload: true,
+            directoryListing: false,
+            open: true,
+            port:9999 
+        }));
 });
 
 
