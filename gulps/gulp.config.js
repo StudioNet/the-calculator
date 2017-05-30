@@ -1,22 +1,23 @@
 module.export = function (rootFolder) {
-    let root    = rootFolder || '';
-    let src     = root + "src/";
-    let assets  = root + "assets/";
+    let root = rootFolder || '';
+    let app = root + "app/";
+    let assets = root + "assets/";
 
     let assetsPath = {
         css: assets + 'css/',
-        images: assets + 'imgs/'
-    } 
+        images: assets + 'imgs/',
+        fonts: assets + 'fonts/'
+    }
 
     let index = root + 'index.html';
     let code = {
-        ts: app + '**/*.ts',
-        js: app + '**/*.js'
+        js: app + '**/*.js',
+        sass: app + '**/*.scss'
     }
 
     let dist = 'build/';
     let build = {
-        path: dist, 
+        path: dist,
         app: dist + 'app/'
     }
 }
