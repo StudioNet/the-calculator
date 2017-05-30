@@ -7,29 +7,29 @@ var shell = require('./shell.helper');
 var PromiseBuilder = require('./stream.promise.builder');
 
 function BuildProcess(processConfig) {
-    if(processConfig == null || !processConfig) {
+    if (processConfig == null || !processConfig) {
         throw new Error("Build process must have configuration for run");
     }
 
     function cleanBuildFolder() {
         if (!processConfig.build) {
-            throw new Error("Build folder must be exist");    
+            throw new Error("Build folder must be exist");
         }
-        shell.empty(processConfig.build);
+        shell.empty(processConfig.build.path);
     }
 
     function copyJsFiles() {
-        if(!processConfig.copy || !processConfig.copy.js) {
+        if (!processConfig.copy || !processConfig.copy.js) {
             throw new Error("Copy JS files sections must be configured...");
         }
         console.info("Start copying JS files...");
         PromiseBuilder(gulp.src(processConfig.copy.js.from))
-                    .pipe(gulp.dest(processConfig.copy.js.to))
-                    .done();
+            .pipe(gulp.dest(processConfig.copy.js.to))
+            .done();
     }
 
     function startApplication() {
-        if(!processConfig.baseUrl) {
+        if (!processConfig.baseUrl) {
             throw new Error("Base URI of application must be configured...");
         }
         console.info("Opening the application start page...");
@@ -42,16 +42,16 @@ function BuildProcess(processConfig) {
             writable: false,
             value: function build() {
                 return Promise.resolve()
-                        .then(cleanBuildFolder.bind(this))
-                        .then(copyJsFiles.bind(this));
+                    .then(cleanBuildFolder.bind(this))
+                    .then(copyJsFiles.bind(this));
             }
         },
-        clean: { 
+        clean: {
             enumerable: false,
             writable: false,
             value: function clean() {
                 return Promise.resolve()
-                        .then(cleanBuildFolder.bind(this));
+                    .then(cleanBuildFolder.bind(this));
             }
         }
     });

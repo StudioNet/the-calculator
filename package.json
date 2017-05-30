@@ -29,9 +29,12 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-open": "^2.0.0",
     "gulp-print": "^2.0.1",
     "gulp-rollup": "^2.11.0",
-    "gulp-webserver": "^0.9.1"
+    "gulp-webserver": "^0.9.1",
+    "shelljs": "^0.7.7"
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
