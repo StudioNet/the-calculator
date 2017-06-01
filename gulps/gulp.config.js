@@ -17,7 +17,10 @@ module.exports = function (rootFolder) {
     self.src = {
         app: app,
         code: {
-            libs: './js/**/*.js',
+            libs: [
+                './js/**/*.js',
+                '../node_modules/'
+            ],
             appjs: app + '**/*.js',
             sass: app + '**/*.scss'
         }

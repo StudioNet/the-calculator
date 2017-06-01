@@ -28,9 +28,11 @@
             this.model = model;
             this.views = view;
 
-            this.model.typeChanged.subscribe('calculatorModeChanged', function (sender, element) {
-                operatorsCtrl.fillList(model.types[element.id]);  
-            });
+            this.model
+                .typeChanged
+                .subscribe('calculatorModeChanged', function (sender, element) {
+                    operatorsCtrl.fillList(model.types[element.id]);  
+                });
             return this; 
         } 
     }
