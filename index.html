@@ -10,15 +10,17 @@
     <link href="assets/css/app.css" rel="stylesheet" />
 </head>
 
-<body>
+<body ng-app="thecalculator"> 
     <div class="jumb vertical-center">
-        <div class="container calculator">
-
+        <div class="container calculator" ng-controller="CalculatorController"> 
+ 
             <div class="row">
                 <div class="col-md-12">
-                    <h1 class="header-text">Calculator</h1>
+                    <h1 class="header-text">{{::title}}</h1>
+                    <h4 class="header-text"><small>{{::subTitle}}</small></h4>
                     <hr />
                 </div>
+
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -57,6 +59,8 @@
     <script type="text/javascript" src="/libs/jquery.min.js"></script>
     <script type="text/javascript" src="/libs/modernizr-2.8.3.min.js"></script>
     <script type="text/javascript" src="/libs/bootstrap.js"></script>
+    <script type="text/javascript" src="/libs/angular.js"></script>
+    <script type="text/javascript" src="/libs/Rx.js"></script>
     <script type="text/javascript" src="/app/app.js"></script>
     <script type="text/javascript" src="/app/observer.js"></script>
     <script type="text/javascript" src="/app/types.js"></script>

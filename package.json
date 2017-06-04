@@ -26,6 +26,7 @@
   "homepage": "https://github.com/StudioNet/the-calculator#readme",
   "devDependencies": {
     "@reactivex/rxjs": "^5.4.0",
+    "angular": "^1.6.4",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.1",

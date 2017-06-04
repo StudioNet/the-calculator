@@ -19,7 +19,8 @@ module.exports = function (rootFolder) {
         code: {
             libs: [
                 './js/**/*.js',
-                '../node_modules/'
+                './node_modules/angular/angular.js',
+                './node_modules/@reactivex/rxjs/dist/global/Rx.js',
             ],
             appjs: app + '**/*.js',
             sass: app + '**/*.scss'

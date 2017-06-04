@@ -11,7 +11,7 @@ var BuildProcess = require('./gulps/build.process');
 //initialize build process helper
 var buildProcess = new BuildProcess(appConfig);
 
-gulp.task('config:paths', function () {
+gulp.task('print-paths', function () {
     console.info('Assets paths: ');
     console.info('-------Start--------');
     console.info(appConfig.assets.css);
@@ -43,6 +43,10 @@ gulp.task('copy:index', function () {
         .pipe(gulp.dest(appConfig.build.path));
 });
 
+gulp.task('watch:index', function() {
+    gulp.watch(appConfig.index, ['copy:index']);
+});
+
 gulp.task('copy:libs', function () {
     return gulp.src(appConfig.src.code.libs)
         .pipe(print())
@@ -67,13 +71,19 @@ gulp.task('copy:appjs', function () {
         .pipe(gulp.dest(appConfig.build.app));
 });
 
+gulp.task('watch:appjs', function() {
+    gulp.watch(appConfig.src.code.appjs, ['copy:appjs']);
+});    
+
 gulp.task('build:clean', function () {
     buildProcess.clean();
 });
 
 gulp.task('build:dev', ['build:clean', 'copy:index', 'copy:libs', 'copy:appjs', 'copy:css', 'copy:fonts']);
 
-gulp.task('serve:dev', ['build:dev'], function () {
+gulp.task('watch', ['watch:index', 'watch:appjs']);
+
+gulp.task('serve:dev', ['build:dev', 'watch'], function () {
     gulp.src(appConfig.build.path)
         .pipe(webserver({ 
             livereload: true,
