@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>The Calculator</title> 
+    <title>The Calculator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8" />
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -10,29 +10,20 @@
     <link href="assets/css/app.css" rel="stylesheet" />
 </head>
 
-<body ng-app="thecalculator"> 
+<body ng-app="thecalculator">
     <div class="jumb vertical-center">
-        <div class="container calculator" ng-controller="CalculatorController"> 
- 
+        <div class="container calculator" ng-controller="CalculatorController">
+
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="header-text">{{::title}}</h1>
                     <h4 class="header-text"><small>{{::subTitle}}</small></h4>
                     <hr />
                 </div>
-
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <label class="radio-inline">
-                        <input id="standard" type="radio" name="calculatorType" checked="checked"/>Standard
-                    </label>
-                        <label class="radio-inline">
-                        <input id="scientific" type="radio" name="calculatorType"/>Scientific
-                    </label>
-                        <label class="radio-inline">
-                        <input id="programmer" type="radio" name="calculatorType"/>Programmer
-                    </label>
+                    <calculator-type-list types="calculatorTypes"></calculator-type-list>
                 </div>
             </div>
             <div class="row">
@@ -56,6 +47,8 @@
         </div>
     </div>
 
+    <!-- inject:js -->
+
     <script type="text/javascript" src="/libs/jquery.min.js"></script>
     <script type="text/javascript" src="/libs/modernizr-2.8.3.min.js"></script>
     <script type="text/javascript" src="/libs/bootstrap.js"></script>
@@ -67,31 +60,34 @@
     <script type="text/javascript" src="/app/operators.js"></script>
     <script type="text/javascript" src="/app/calculator.js"></script>
 
+    <!-- endinject -->
+
     <script type="text/javascript">
         $(document).ready(function () {
 
-            var operatorsListView = Operators.Views.ListView.create(Operators.Model, { list: $("#operations") });
-            var operatorsController = Operators.Controller.create(Operators.Model, operatorsListView);
+            // var operatorsListView = Operators.Views.ListView.create(Operators.Model, { list: $("#operations") });
+            // var operatorsController = Operators.Controller.create(Operators.Model, operatorsListView);
 
-            var typesModel = Types.Model.create(Operators.Model);
-            var typesView = new Types.View.create(typesModel, {
-                standard: $("#standard"),
-                scientific: $("#scientific"),
-                programmer: $("#programmer")
-            });
+            // var typesModel = Types.Model.create(Operators.Model);
 
-            var typesController = Types.Controller.create(typesModel, typesView, operatorsController);
+            // var typesView = new Types.View.create(typesModel, {
+            //     standard: $("#standard"),
+            //     scientific: $("#scientific"),
+            //     programmer: $("#programmer")
+            // });
 
-            var calculatorModel = Calculator.Model.create(typesModel);
-            var calculatorView = Calculator.View.create(calculatorModel, {
-                leftOperand: $("#leftOperand"),
-                rightOperand: $("#rightOperand"),
-                result: $("#txtResult"),
-                operations: $("#operations")
-            });
+            // var typesController = Types.Controller.create(typesModel, typesView, operatorsController);
 
-            Calculator.Controller.create(calculatorModel, calculatorView, operatorsController);
-            operatorsListView.show();
+            // var calculatorModel = Calculator.Model.create(typesModel);
+            // var calculatorView = Calculator.View.create(calculatorModel, {
+            //     leftOperand: $("#leftOperand"),
+            //     rightOperand: $("#rightOperand"),
+            //     result: $("#txtResult"),
+            //     operations: $("#operations")
+            // });
+
+            // Calculator.Controller.create(calculatorModel, calculatorView, operatorsController);
+            // operatorsListView.show();
         });
     </script>
 

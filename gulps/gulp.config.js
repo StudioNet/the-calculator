@@ -15,6 +15,7 @@ module.exports = function (rootFolder) {
     self.index = index;
 
     self.src = {
+        root: root,
         app: app,
         code: {
             libs: [

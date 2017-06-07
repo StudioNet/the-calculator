@@ -16,28 +16,28 @@
 
         create: function (operators) {
             typesBuilder(operators, this.types);
-            return this; 
-        } 
+            return this;
+        }
     }
 
     var TypesCalculatorController = {
         model: null,
         views: null,
-         
-        create: function (model, view, operatorsCtrl) { 
+
+        create: function (model, view, operatorsCtrl) {
             this.model = model;
             this.views = view;
 
             this.model
                 .typeChanged
                 .subscribe('calculatorModeChanged', function (sender, element) {
-                    operatorsCtrl.fillList(model.types[element.id]);  
+                    operatorsCtrl.fillList(model.types[element.id]);
                 });
-            return this; 
-        } 
+            return this;
+        }
     }
 
-    function registerEvents(viewElements, model) {  
+    function registerEvents(viewElements, model) {
         for (var type in viewElements) {
             //debugger;
             if (viewElements.hasOwnProperty(type)) {
@@ -56,7 +56,7 @@
         create: function (model, elements) {
             this.model = model;
             this.viewElements = elements;
-            registerEvents(this.viewElements, this.model); 
+            registerEvents(this.viewElements, this.model);
         }
     }
 

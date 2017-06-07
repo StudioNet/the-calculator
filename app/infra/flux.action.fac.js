@@ -1,5 +1,3 @@
-/// <reference path="/node_modules/rxjs/dist/global/Rx.js" />
-
 (function (rx) {
     'use strict';
 
@@ -13,6 +11,11 @@
         function BaseAction(actionTypes) {
             var actionSubject = new rx.BehaviorSubject({ type: '', data: null });
 
+            /**
+             * when actions collection instantiated 
+             * we  need to bind all action types 
+             * to the current instance
+             */
             for (var name in actionTypes) {
                 if (actionTypes.hasOwnProperty(name)) {
                     var element = actionTypes[name];
@@ -28,8 +31,9 @@
 
             return Object.create({}, {
                 dispatch: {
-                    configurable: true,
+                    configurable: false,
                     value: function (actionType, actionPayload) {
+                        debugger;
                         if (angular.isUndefined(actionType) && angular.isUndefined(actionPayload)) {
                             throw Error('Missing required arguments {actionType} & {actionPayload}');
                         }
@@ -42,8 +46,9 @@
                     }
                 },
                 subscribe: {
-                    configurable: true,
+                    configurable: false,
                     value: function (actionType, consumerFunc, context) {
+                        debugger;
                         if (angular.isUndefined(actionType) || this.hasOwnProperty(actionType)) {
                             throw Error('Missing required arguments {actionType}');
                         }
@@ -51,16 +56,18 @@
                             throw Error('Missing required argument {consumerFunc} or argument is not a function');
                         }
                         return actionSubject
-                                .filter(function (payload) {
-                                    return payload.type === this[actionType];
-                                })
-                                .subscribe(function (payload) {
-                                    consumerFunc.apply(context, [payload]);
-                                });
+                            .filter(function (payload) {
+                                debugger;
+                                return payload.type === this[actionType];
+                            })
+                            .subscribe(function (payload) {
+                                debugger;
+                                consumerFunc.apply(context, [payload]);
+                            });
                     }
                 },
                 dispose: {
-                    configurable: true,
+                    configurable: false,
                     value: function (subscription) {
                         if (angular.isDefined(subscription)) {
                             subscription.dispose();
@@ -74,6 +81,7 @@
         }
 
         /*
+            Method calling 
             @types -> thus action types to default initialization
         */
         function createAction(types) {
@@ -82,7 +90,7 @@
 
         return {
             create: createAction
-        }
+        };
 
     }
 })(Rx);
