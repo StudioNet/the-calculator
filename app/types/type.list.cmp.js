@@ -19,6 +19,7 @@
 
     //TypeListController.$inject = [''];
     function TypeListController() {
+        //debugger;
         var $ctrl = this;
         $ctrl.$onInit = function () { };
         $ctrl.$onChanges = function (changesObj) { };

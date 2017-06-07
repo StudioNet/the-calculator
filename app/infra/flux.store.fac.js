@@ -9,7 +9,7 @@
     function BaseStoreFactory($cacheFactory) {
 
         function BaseStore(storeData, defaultAction) {
-            var store = rx.BehaviorSubject(storeData);
+            var store = new rx.BehaviorSubject(storeData);
             var storeState = storeData;
             var storeHistory = [];
             var historyDeep = -1;
@@ -21,7 +21,7 @@
                 }
                 if (storeState !== storeHistory[historyDeep]) {
                     storeState = storeHistory[historyDeep];
-                    store.onNext(storeState);
+                    store.next(storeState);
                 }
             }
 
@@ -31,7 +31,7 @@
                 }
                 if (storeState !== storeHistory[historyDeep]) {
                     storeState = storeHistory[historyDeep];
-                    store.onNext(storeState);
+                    store.next(storeState);
                 }
             }
 
@@ -49,7 +49,7 @@
                             historyDeep++;
                             storeHistory.push(storeState);
                         }
-                        store.onNext(storeState);
+                        store.next(storeState);
                     }
                 },
                 subscribe: {
@@ -75,14 +75,15 @@
                         }
                     }
                 },
-                registerAction: {
+                attachAction: {
                     configurable: false,
                     enumerable: false,
                     value: function (actionType, actionFunc, actionContext) {
+                        debugger;
                         return action.subscribe(actionType, actionFunc, actionContext);
                     }
                 },
-                unregisterAction: {
+                detachAction: {
                     configurable: false,
                     enumerable: false,
                     value: function (actionSubscription) {
@@ -136,7 +137,7 @@
         }
 
         return {
-            new: createStore
+            create: createStore
         };
     }
 

@@ -10,26 +10,23 @@
 
         function BaseAction(actionTypes) {
             var actionSubject = new rx.BehaviorSubject({ type: '', data: null });
-
+            //debugger;
             /**
              * when actions collection instantiated 
              * we  need to bind all action types 
              * to the current instance
              */
-            for (var name in actionTypes) {
-                if (actionTypes.hasOwnProperty(name)) {
-                    var element = actionTypes[name];
-                    Object.defineProperty(this, name, {
-                        configurable: true,
+            var self = this;
+            angular.forEach(actionTypes, function(type, idx) {
+                Object.defineProperty(self, type, {
                         enumerable: true,
                         get: function () {
-                            return actionTypes[name];
+                            return actionTypes[idx];
                         }
                     });
-                }
-            }
+            });
 
-            return Object.create({}, {
+            return Object.create(self, {
                 dispatch: {
                     configurable: false,
                     value: function (actionType, actionPayload) {
@@ -38,7 +35,7 @@
                             throw Error('Missing required arguments {actionType} & {actionPayload}');
                         }
                         else {
-                            actionSubject.onNext({
+                            actionSubject.next({
                                 type: actionType,
                                 data: actionPayload
                             });
@@ -48,17 +45,17 @@
                 subscribe: {
                     configurable: false,
                     value: function (actionType, consumerFunc, context) {
-                        debugger;
                         if (angular.isUndefined(actionType) || this.hasOwnProperty(actionType)) {
                             throw Error('Missing required arguments {actionType}');
                         }
                         if (!angular.isFunction(consumerFunc)) {
                             throw Error('Missing required argument {consumerFunc} or argument is not a function');
                         }
+                        var self = this;
                         return actionSubject
                             .filter(function (payload) {
                                 debugger;
-                                return payload.type === this[actionType];
+                                return payload.type === self[actionType];
                             })
                             .subscribe(function (payload) {
                                 debugger;

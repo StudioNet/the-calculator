@@ -17,21 +17,22 @@
     function CalculatorController($scope, TypesStore, TypesActions) {
         $scope.title = 'The Calculator';
         $scope.subTitle = 'Think more, do less...';
-        debugger;
-        TypesStore.get().init();
-
-        TypesStore.get().subscribe(function (payload) {
-            debugger;
-            $scope.calculatorTypes = payload;
-        }, this);
-
         $scope.calculatorTypes = [];
 
+        debugger;
+        //TypesStore.get().init();
+
+        var observerGetTypes = TypesStore.get().subscribe(function(types) {
+            $scope.calculatorTypes = types;
+        });
+
+        
+
         function loadTypes() {
-            TypesActions.getTypes();
+            TypesActions.get().getTypes();
         }
 
-        loadTypes();
+        //loadTypes();
     }
 
 })();

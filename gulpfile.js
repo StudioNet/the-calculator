@@ -6,7 +6,10 @@ var concat = require('gulp-concat');
 var print = require('gulp-print');
 var webserver = require('gulp-webserver');
 var injector = require('gulp-inject');
-var series = require('stream-series')
+var series = require('stream-series');
+var sequence = require('run-sequence');
+var order = require('gulp-order');
+var naturalSort = require('gulp-natural-sort');
 var appConfig = require('./gulps/gulp.config')('.');
 var BuildProcess = require('./gulps/build.process');
 
@@ -61,6 +64,10 @@ gulp.task('copy:css', function () {
         .pipe(gulp.dest(appConfig.build.assets.css))
 });
 
+gulp.task('watch:css', function () {
+    gulp.watch(appConfig.src.code.css, ['copy:css']);
+});
+
 gulp.task('copy:fonts', function () {
     return gulp.src(appConfig.assets.fonts)
         .pipe(print())
@@ -81,19 +88,38 @@ gulp.task('build:clean', function () {
     buildProcess.clean();
 });
 
-gulp.task('build:index', function () {
+gulp.task('compile:index', function () {
     var targetIndex = gulp.src(appConfig.index);
-    var vendorsSource = gulp.src(appConfig.src.code.libs, { read: false });
-    var appSource = gulp.src(appConfig.src.code.appjs, { read: false });
-
-    return targetIndex.pipe(injector(series(vendorsSource, appSource)))
-        .pipe(gulp.dest(appConfig.build.path));
+    var vendorsSource = gulp.src([
+        appConfig.build.libs + 'jquery.min.js',
+        appConfig.build.libs + 'bootstrap.min.js',
+        appConfig.build.libs + '**/*.js',
+    ], { read: false });
+    var appSource = gulp.src([
+        appConfig.build.app + 'infra/*.mdl.js',
+        appConfig.build.app + 'infra/*.js',
+        appConfig.build.app + 'app.js',
+        appConfig.build.app + 'types/*.js',
+        appConfig.build.app + 'operators/*.js'
+    ], { read: false });
+    return targetIndex.pipe(
+            injector(series(vendorsSource, appSource), {
+                    transform: function(filepath, file, index, length, targetFile) {
+                        filepath = filepath.replace('/build', '');
+                        return '<script src="'+ filepath + '"></script>';
+                    }
+                }))
+                .pipe(gulp.dest(appConfig.build.path));
 });
 
+gulp.task('build:dev', function(done) {
+    sequence('build:clean', 
+            ['copy:index', 'copy:libs', 'copy:appjs', 'copy:css', 'copy:fonts'], 
+            'compile:index',
+            done);
+});
 
-gulp.task('build:dev', ['build:clean', 'copy:index', 'copy:libs', 'copy:appjs', 'copy:css', 'copy:fonts']);
-
-gulp.task('watch', ['watch:index', 'watch:appjs']);
+gulp.task('watch', ['watch:index', 'watch:appjs', 'watch:css']);
 
 gulp.task('serve:dev', ['build:dev', 'watch'], function () {
     gulp.src(appConfig.build.path)

@@ -19,11 +19,18 @@ module.exports = function (rootFolder) {
         app: app,
         code: {
             libs: [
-                './js/**/*.js',
+                './js/jquery.min.js',
+                './js/bootstrap.min.js',
                 './node_modules/angular/angular.js',
                 './node_modules/@reactivex/rxjs/dist/global/Rx.js',
+                '!./js/ex.js',
+                '!./js/npm.js',
+                '!./js/bootstrap.js'
             ],
-            appjs: app + '**/*.js',
+            appjs: [
+                    app + '**/*.js', 
+                    app + '/app.js'
+            ],
             sass: app + '**/*.scss'
         }
     };

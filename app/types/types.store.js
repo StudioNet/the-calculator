@@ -14,7 +14,7 @@
         };
 
         function TypesStore() {
-            var store = BaseStore.createStore(initialState, TypesActions);
+            var store = BaseStore.create(initialState, TypesActions.get());
 
             function typesArray() {
                 return Object.keys(initialState);

@@ -13,7 +13,7 @@
         };
 
         function TypesActions() {
-            var actions = BaseAction.createAction(actionsTypes);
+            var actions = BaseAction.create(actionsTypes);
 
             return Object.create(actions, {
                 getTypes: {
