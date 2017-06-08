@@ -8,12 +8,13 @@
     BaseStoreFactory.$inject = ['$cacheFactory'];
     function BaseStoreFactory($cacheFactory) {
 
-        function BaseStore(storeData, defaultAction) {
+        function BaseStore(storeData, actions) {
             var store = new rx.BehaviorSubject(storeData);
             var storeState = storeData;
             var storeHistory = [];
             var historyDeep = -1;
-            var action = defaultAction;
+            var defaultActions = actions;
+            var subscriptions = {};
 
             function undo() {
                 if (historyDeep > 0) {
@@ -36,6 +37,13 @@
             }
 
             return Object.create({}, {
+                actions: {
+                    configurable: false,
+                    enumerable: true,
+                    get: function () {
+                        return defaultActions;
+                    }
+                },
                 init: {
                     configurable: false,
                     value: function () {
@@ -53,14 +61,20 @@
                     }
                 },
                 subscribe: {
+                    /**
+                     * Current method explore elegant way to other modules / components 
+                     * to subscribe to current store's observable
+                     */
                     configurable: false,
                     value: function (consumerFunc, context) {
-                        debugger;
+                        //debugger;
                         if (!angular.isFunction(consumerFunc)) {
                             throw Error('Missing required argument {consumerFunc} or argument is not a function');
                         }
-                        return store.subscribe(function (payload) {
-                            consumerFunc.apply(context, [payload]);
+                        return store.subscribe({
+                            next: function (payload) {
+                                consumerFunc.apply(context, [payload]);
+                            }
                         });
                     }
                 },
@@ -79,8 +93,7 @@
                     configurable: false,
                     enumerable: false,
                     value: function (actionType, actionFunc, actionContext) {
-                        debugger;
-                        return action.subscribe(actionType, actionFunc, actionContext);
+                        return defaultActions.subscribe(actionType, actionFunc, actionContext);
                     }
                 },
                 detachAction: {
@@ -88,7 +101,7 @@
                     enumerable: false,
                     value: function (actionSubscription) {
                         if (angular.isDefined(actionSubscription)) {
-                            action.dispose(actionSubscription);
+                            defaultActions.dispose(actionSubscription);
                         }
                     }
                 },
@@ -99,23 +112,23 @@
                         this.isUndoRedo = enableFeature;
                         if (enableFeature) {
                             if (!this.undoSubscription) {
-                                this.undoSubscription = this.handleAction("UNDO-STATE",
+                                this.undoSubscription = this.attachAction("UNDO-STATE",
                                     undo.bind(this),
                                     this);
                             }
                             if (!this.redoSubscription) {
-                                this.redoSubscription = this.handleAction('REDO-STATE',
+                                this.redoSubscription = this.attachAction('REDO-STATE',
                                     redo.bind(this),
                                     this);
                             }
                         }
                         else {
                             if (this.undoSubscription) {
-                                this.unHandleAction(this.undoSubscription);
+                                this.detachAction(this.undoSubscription);
                                 this.undoSubscription = null;
                             }
                             if (this.redoSubscription) {
-                                this.unHandleAction(this.redoSubscription);
+                                this.detachAction(this.redoSubscription);
                                 this.redoSubscription = null;
                             }
                         }
@@ -132,8 +145,8 @@
            -> @storeData initialized state 
            -> @defaultAction required for any created store
         */
-        function createStore(storeData, defaultAction) {
-            return new BaseStore(storeData, defaultAction);
+        function createStore(storeData, defaultActions) {
+            return new BaseStore(storeData, defaultActions);
         }
 
         return {

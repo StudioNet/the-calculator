@@ -17,13 +17,13 @@
              * to the current instance
              */
             var self = this;
-            angular.forEach(actionTypes, function(type, idx) {
+            angular.forEach(actionTypes, function (type, idx) {
                 Object.defineProperty(self, type, {
-                        enumerable: true,
-                        get: function () {
-                            return actionTypes[idx];
-                        }
-                    });
+                    enumerable: true,
+                    get: function () {
+                        return actionTypes[idx];
+                    }
+                });
             });
 
             return Object.create(self, {
@@ -54,12 +54,13 @@
                         var self = this;
                         return actionSubject
                             .filter(function (payload) {
-                                debugger;
                                 return payload.type === self[actionType];
                             })
-                            .subscribe(function (payload) {
-                                debugger;
-                                consumerFunc.apply(context, [payload]);
+                            .subscribe({
+                                next: function (payload) {
+                                    debugger;
+                                    consumerFunc.apply(context, [payload]);
+                                }
                             });
                     }
                 },
