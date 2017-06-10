@@ -10,15 +10,17 @@
 
         function BaseAction(actionTypes) {
             var actionSubject = new rx.BehaviorSubject({ type: '', data: null });
+            var self = this;
             //debugger;
             /**
              * when actions collection instantiated 
              * we  need to bind all action types 
              * to the current instance
              */
-            var self = this;
+            
             angular.forEach(actionTypes, function (type, idx) {
                 Object.defineProperty(self, type, {
+                    configurable: true,
                     enumerable: true,
                     get: function () {
                         return actionTypes[idx];
@@ -26,26 +28,22 @@
                 });
             });
 
-            return Object.create(self, {
+            return Object.defineProperties(self, {
                 dispatch: {
                     configurable: false,
                     value: function (actionType, actionPayload) {
-                        debugger;
                         if (angular.isUndefined(actionType) && angular.isUndefined(actionPayload)) {
                             throw Error('Missing required arguments {actionType} & {actionPayload}');
                         }
                         else {
-                            actionSubject.next({
-                                type: actionType,
-                                data: actionPayload
-                            });
+                            actionSubject.next({type: actionType, data: actionPayload});
                         }
                     }
                 },
                 subscribe: {
                     configurable: false,
                     value: function (actionType, consumerFunc, context) {
-                        if (angular.isUndefined(actionType) || this.hasOwnProperty(actionType)) {
+                        if (angular.isUndefined(actionType) || !this[actionType]) {
                             throw Error('Missing required arguments {actionType}');
                         }
                         if (!angular.isFunction(consumerFunc)) {
@@ -58,7 +56,6 @@
                             })
                             .subscribe({
                                 next: function (payload) {
-                                    debugger;
                                     consumerFunc.apply(context, [payload]);
                                 }
                             });

@@ -37,16 +37,17 @@
             }
 
             return Object.create({}, {
-                actions: {
+                state: {
                     configurable: false,
-                    enumerable: true,
+                    enumerable: false,
                     get: function () {
-                        return defaultActions;
+                        return store;
                     }
                 },
                 init: {
                     configurable: false,
                     value: function () {
+                        //store.subscribe(defaultActions);
                         this.stateChange();
                     }
                 },
@@ -112,14 +113,10 @@
                         this.isUndoRedo = enableFeature;
                         if (enableFeature) {
                             if (!this.undoSubscription) {
-                                this.undoSubscription = this.attachAction("UNDO-STATE",
-                                    undo.bind(this),
-                                    this);
+                                this.undoSubscription = this.attachAction("UNDO-STATE", undo.bind(this), this);
                             }
                             if (!this.redoSubscription) {
-                                this.redoSubscription = this.attachAction('REDO-STATE',
-                                    redo.bind(this),
-                                    this);
+                                this.redoSubscription = this.attachAction('REDO-STATE', redo.bind(this), this);
                             }
                         }
                         else {
@@ -140,7 +137,7 @@
         /*
            Method calling in order to create concrete store
            Created store must be intialized 
-           with base store state and defaultaction
+           with base store state and default action
 
            -> @storeData initialized state 
            -> @defaultAction required for any created store

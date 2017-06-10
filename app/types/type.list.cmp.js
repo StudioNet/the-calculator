@@ -21,8 +21,17 @@
     function TypeListController() {
         //debugger;
         var $ctrl = this;
-        $ctrl.$onInit = function () { };
-        $ctrl.$onChanges = function (changesObj) { };
+        
+        $ctrl.$onInit = function () { 
+            console.info('On init types list:');
+            console.table($ctrl.types);
+        };
+
+        $ctrl.$onChanges = function (changesObj) { 
+            console.info('On change types list:');
+            console.table(changesObj)
+        };
+
         $ctrl.$onDestroy = function () { };
     }
 })();
