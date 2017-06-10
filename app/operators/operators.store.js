@@ -1,12 +1,12 @@
-(function () {
+(function (rx) {
     'use strict';
 
     angular
         .module('thecalculator')
         .factory('OperatorsStore', OperatorsStore);
 
-    OperatorsStore.$inject = ['BaseStore', 'BaseAction'];
-    function OperatorsStore(BaseStore, BaseAction) {
+    OperatorsStore.$inject = ['BaseStore', 'OperatorActions', 'OperatorsActionsTypes'];
+    function OperatorsStore(BaseStore, OperatorActions, OperatorsActionsTypes) {
 
         var initialState = {
             standard: [
@@ -23,7 +23,38 @@
                 { symbol: "mod", name: "modolo", execute: function (devidend, devisor) { return devidend % devisor; } }
             ]
         };
-        //var store = BaseStore.new();
+        
+        function OperatorsStore() {
+            var store = BaseStore.create(initialState, OperatorActions.get());
+
+            function allOperators(consumerFunc) {
+                var currentState = rx.Observable.of(store.state);
+                currentState.map(function(state) {
+                    return state.standard.concat(state.scientific).concat(state.programmer);
+                }).subscribe({
+                    next: function(concatenatedModel) {
+                        consumerFunc(concatenatedModel);
+                    }
+                });
+            }
+
+            return Object.create(store, {
+                getAllOperators: {
+                    configurable: false,
+                    enumerable: false,
+                    value: function (consumer) {
+                        this.subscribe(allOperators.bind(store, consumer), store);
+                        //this.attachAction(OperatorsActionsTypes.GetAll, allOperators.bind(store), store);
+                    }
+                }
+            }); 
+        }
+
+        var singleton = new OperatorsStore();
+
+        return {
+            get: function () { return singleton; }
+        };
     }
 
-})();
+})(Rx);

@@ -33,7 +33,7 @@
                             <input type="text" id="leftOperand" class="form-control" />
                         </div>
                         <div class="form-group">
-                            <select id="operations" class="form-control"></select>
+                            <operator-list operators="calculatorOperators"></operator-list>
                         </div>
                         <div class="form-group">
                             <input type="text" id="rightOperand" class="form-control" />
@@ -49,46 +49,10 @@
 
     <!-- inject:js -->
 
-    <!--<script type="text/javascript" src="/libs/jquery.min.js"></script>
-    <script type="text/javascript" src="/libs/modernizr-2.8.3.min.js"></script>
-    <script type="text/javascript" src="/libs/bootstrap.js"></script>
-    <script type="text/javascript" src="/libs/angular.js"></script>
-    <script type="text/javascript" src="/libs/Rx.js"></script>
-    <script type="text/javascript" src="/app/app.js"></script>
-    <script type="text/javascript" src="/app/observer.js"></script>
-    <script type="text/javascript" src="/app/types.js"></script>
-    <script type="text/javascript" src="/app/operators.js"></script>
-    <script type="text/javascript" src="/app/calculator.js"></script>-->
-
     <!-- endinject -->
 
     <script type="text/javascript">
-        $(document).ready(function () {
-
-            // var operatorsListView = Operators.Views.ListView.create(Operators.Model, { list: $("#operations") });
-            // var operatorsController = Operators.Controller.create(Operators.Model, operatorsListView);
-
-            // var typesModel = Types.Model.create(Operators.Model);
-
-            // var typesView = new Types.View.create(typesModel, {
-            //     standard: $("#standard"),
-            //     scientific: $("#scientific"),
-            //     programmer: $("#programmer")
-            // });
-
-            // var typesController = Types.Controller.create(typesModel, typesView, operatorsController);
-
-            // var calculatorModel = Calculator.Model.create(typesModel);
-            // var calculatorView = Calculator.View.create(calculatorModel, {
-            //     leftOperand: $("#leftOperand"),
-            //     rightOperand: $("#rightOperand"),
-            //     result: $("#txtResult"),
-            //     operations: $("#operations")
-            // });
-
-            // Calculator.Controller.create(calculatorModel, calculatorView, operatorsController);
-            // operatorsListView.show();
-        });
+       $(document).ready(function () {'Jquery is amazing, but not make sense within angular'});
     </script>
 
 </body>

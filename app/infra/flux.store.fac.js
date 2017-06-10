@@ -9,6 +9,7 @@
     function BaseStoreFactory($cacheFactory) {
 
         function BaseStore(storeData, actions) {
+            //debugger;
             var store = new rx.BehaviorSubject(storeData);
             var storeState = storeData;
             var storeHistory = [];
@@ -41,7 +42,7 @@
                     configurable: false,
                     enumerable: false,
                     get: function () {
-                        return store;
+                        return store.getValue();
                     }
                 },
                 init: {
@@ -51,6 +52,10 @@
                         this.stateChange();
                     }
                 },
+                /**
+                 * calling to the changeState method will update 
+                 * the current state with next value parameter
+                 */
                 stateChange: {
                     configurable: false,
                     value: function () {

@@ -27,7 +27,7 @@
 
             function changeType(payload) {
                 //get state from store
-                var observable = rx.Observable.from(store.state.getValue());
+                var observable = rx.Observable.from(store.state);
                 observable.map(function(storeItem, idx, obser) {
                     storeItem.selected = false;
                 }).subscribe();
