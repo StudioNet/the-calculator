@@ -1,8 +1,8 @@
-(function(rx) {
+(function (rx) {
     'use strict';
 
     angular
-        .module('thecalculator') 
+        .module('thecalculator')
         .factory('OperatorActions', OperatorActionsFactory);
 
     angular
@@ -16,35 +16,35 @@
     OperatorActionsFactory.$inject = ['BaseAction', 'OperatorsActionsTypes'];
     function OperatorActionsFactory(BaseAction, OperatorsActionsTypes) {
 
-       function OperatorActions() {
+        function OperatorActions() {
             var actions = BaseAction.create(OperatorsActionsTypes);
 
             return Object.create(actions, {
-                GetAllOperators: {
+                getAllOperators: {
                     configurable: false,
                     enumerable: false,
-                    value: function() {
+                    value: function () {
                         this.dispatch(OperatorsActionsTypes.GetAll, null);
                     }
                 },
-                GetByType: {
-                    configurable: false, 
+                getByType: {
+                    configurable: false,
                     enumerable: false,
-                    value: function(calculatorType) {
+                    value: function (calculatorType) {
                         this.dispatch(OperatorsActionsTypes.GetByType, calculatorType);
                     }
                 },
-                ExecuteOperator: {
+                executeOperator: {
                     configurable: false,
                     enumerable: false,
-                    value: function(operation) {
+                    value: function (operation) {
                         this.dispatch(OperatorsActionsTypes.ExecuteOperator, operation);
                     }
                 }
             });
-       }
+        }
 
-       var singleton = new OperatorActions();
+        var singleton = new OperatorActions();
 
         return {
             get: function () { return singleton; },

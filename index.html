@@ -30,16 +30,19 @@
                 <div class="col-md-12">
                     <form class="form-inline calc-form">
                         <div class="form-group">
-                            <input type="text" id="leftOperand" class="form-control" />
+                            <input type="text" id="leftOperand" class="form-control" ng-model="currentOperation.leftValue" />
                         </div>
                         <div class="form-group">
                             <operator-list operators="calculatorOperators"></operator-list>
                         </div>
                         <div class="form-group">
-                            <input type="text" id="rightOperand" class="form-control" />
+                            <input type="text" id="rightOperand" class="form-control" ng-model="currentOperation.rightValue" />
                         </div>
                         <div class="form-group">
-                            = <span id="txtResult" class="form-control"></span>
+                            = <span id="txtResult" class="form-control" ng-model="currentOperation.result"></span>
+                        </div>
+                        <div>
+                            <input type="button" value="Save operation" ng-click="saveOperation()" />
                         </div>
                     </form>
                 </div>
@@ -52,7 +55,7 @@
     <!-- endinject -->
 
     <script type="text/javascript">
-       $(document).ready(function () {'Jquery is amazing, but not make sense within angular'});
+        $(document).ready(function () { 'Jquery is amazing, but not adds value with angular' });
     </script>
 
 </body>

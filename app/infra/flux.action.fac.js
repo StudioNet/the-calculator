@@ -11,13 +11,11 @@
         function BaseAction(actionTypes) {
             var actionSubject = new rx.BehaviorSubject({ type: '', data: null });
             var self = this;
-            //debugger;
             /**
              * when actions collection instantiated 
              * we  need to bind all action types 
              * to the current instance
              */
-            
             angular.forEach(actionTypes, function (type, idx) {
                 Object.defineProperty(self, type, {
                     configurable: true,
@@ -36,17 +34,17 @@
                             throw Error('Missing required arguments {actionType} & {actionPayload}');
                         }
                         else {
-                            actionSubject.next({type: actionType, data: actionPayload});
+                            actionSubject.next({ type: actionType, data: actionPayload });
                         }
                     }
                 },
                 subscribe: {
                     configurable: false,
-                    value: function (actionType, consumerFunc, context) {
+                    value: function (actionType, actionFunc, context, consumerFunc) {
                         if (angular.isUndefined(actionType) || !this[actionType]) {
                             throw Error('Missing required arguments {actionType}');
                         }
-                        if (!angular.isFunction(consumerFunc)) {
+                        if (!angular.isFunction(actionFunc)) {
                             throw Error('Missing required argument {consumerFunc} or argument is not a function');
                         }
                         var self = this;
@@ -56,7 +54,12 @@
                             })
                             .subscribe({
                                 next: function (payload) {
-                                    consumerFunc.apply(context, [payload]);
+                                    if (angular.isFunction(consumerFunc)) {
+                                        actionFunc.apply(context, [payload, consumerFunc]);
+                                    }
+                                    else {
+                                        actionFunc.apply(context, [payload]);
+                                    }
                                 }
                             });
                     }

@@ -1,4 +1,4 @@
-(function(rx) {
+(function (rx) {
     'use strict';
 
     // Usage:
@@ -9,26 +9,34 @@
     angular
         .module('thecalculator')
         .component('operatorList', {
-            template:''
-            +'<select name=\'operatorsSelect\' ng-model=\'$ctrl.selectedOperator\' class=\'form-control\'>'
-                +'<option ng-repeat="option in $ctrl.operators" value="{{::option.name}}">{{::option.symbol}}</option>'
-            +'</select>',
+            template: ''
+            + '<select name=\'operatorsSelect\''
+            + '         ng-model=\'$ctrl.selectedOperator\' ng-options=\'o.symbol for o in $ctrl.operators\''
+            + '         class=\'form-control\'>'
+            + '</select>',
             controller: OperatorListController,
             controllerAs: '$ctrl',
             bindings: {
                 operators: '<',
-            },
+            }
         });
 
     OperatorListController.$inject = [];
     function OperatorListController() {
         var $ctrl = this;
-        
-        $ctrl.$onInit = function() { 
-            $ctrl.selectedOperator = $ctrl.operators[0];
+
+        function updateViewState(operators) {
+            $ctrl.selectedOperator = operators[0];
+        }
+
+        $ctrl.$onInit = function () {
+            updateViewState($ctrl.operators);
         };
 
-        $ctrl.$onChanges = function(changesObj) { };
-        $ctrl.$onDestroy = function() { };
+        $ctrl.$onChanges = function (changesObj) {
+            updateViewState(changesObj.operators.currentValue);
+        };
+
+        $ctrl.$onDestroy = function () { };
     }
 })(Rx);

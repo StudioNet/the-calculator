@@ -58,10 +58,13 @@
                  */
                 stateChange: {
                     configurable: false,
-                    value: function () {
+                    value: function (nextState) {
                         if (this.isUndoRedo) {
                             historyDeep++;
                             storeHistory.push(storeState);
+                        }
+                        if (angular.isDefined(nextState)) {
+                            storeState = nextState;
                         }
                         store.next(storeState);
                     }
@@ -72,14 +75,18 @@
                      * to subscribe to current store's observable
                      */
                     configurable: false,
-                    value: function (consumerFunc, context) {
-                        //debugger;
-                        if (!angular.isFunction(consumerFunc)) {
+                    value: function (storeFunc, context, consumerFunc) {
+                        if (!angular.isFunction(storeFunc)) {
                             throw Error('Missing required argument {consumerFunc} or argument is not a function');
                         }
                         return store.subscribe({
                             next: function (payload) {
-                                consumerFunc.apply(context, [payload]);
+                                if (angular.isFunction(consumerFunc)) {
+                                    storeFunc.apply(context, [payload, consumerFunc]);
+                                }
+                                else {
+                                    storeFunc.apply(context, [payload]);
+                                }
                             }
                         });
                     }
@@ -98,8 +105,8 @@
                 attachAction: {
                     configurable: false,
                     enumerable: false,
-                    value: function (actionType, actionFunc, actionContext) {
-                        return defaultActions.subscribe(actionType, actionFunc, actionContext);
+                    value: function (actionType, actionFunc, actionContext, consumerFunc) {
+                        return defaultActions.subscribe(actionType, actionFunc, actionContext, consumerFunc);
                     }
                 },
                 detachAction: {

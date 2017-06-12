@@ -100,23 +100,24 @@ gulp.task('compile:index', function () {
         appConfig.build.app + 'infra/*.js',
         appConfig.build.app + 'app.js',
         appConfig.build.app + 'types/*.js',
-        appConfig.build.app + 'operators/*.js'
+        appConfig.build.app + 'operators/*.js',
+        appConfig.build.app + 'operations/*.js'
     ], { read: false });
     return targetIndex.pipe(
-            injector(series(vendorsSource, appSource), {
-                    transform: function(filepath, file, index, length, targetFile) {
-                        filepath = filepath.replace('/build', '');
-                        return '<script src="'+ filepath + '"></script>';
-                    }
-                }))
-                .pipe(gulp.dest(appConfig.build.path));
+        injector(series(vendorsSource, appSource), {
+            transform: function (filepath, file, index, length, targetFile) {
+                filepath = filepath.replace('/build', '');
+                return '<script src="' + filepath + '"></script>';
+            }
+        }))
+        .pipe(gulp.dest(appConfig.build.path));
 });
 
-gulp.task('build:dev', function(done) {
-    sequence('build:clean', 
-            ['copy:index', 'copy:libs', 'copy:appjs', 'copy:css', 'copy:fonts'], 
-            'compile:index',
-            done);
+gulp.task('build:dev', function (done) {
+    sequence('build:clean',
+        ['copy:index', 'copy:libs', 'copy:appjs', 'copy:css', 'copy:fonts'],
+        'compile:index',
+        done);
 });
 
 gulp.task('watch', ['watch:index', 'watch:appjs', 'watch:css']);

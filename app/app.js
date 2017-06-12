@@ -11,14 +11,15 @@
     }
 
     //TODO: next step we still move to another file
-    CalculatorController.$inject = ['$scope', 'TypesStore', 'TypesActions', 'OperatorsStore'];
-    function CalculatorController($scope, TypesStore, TypesActions, OperatorsStore) {
+    CalculatorController.$inject = ['$scope', 'TypesStore', 'TypesActions', 'OperatorsStore', 'OperationFactory'];
+    function CalculatorController($scope, TypesStore, TypesActions, OperatorsStore, OperationFactory) {
         $scope.title = 'The Calculator';
         $scope.subTitle = 'Think more, do less...';
         $scope.calculatorTypes = [];
         $scope.calculatorOperators = [];
+        $scope.currentOperation = OperationFactory.new({});
 
-        TypesStore.get().getAllTypes(function allTypesObserver (types) {
+        TypesStore.get().getAllTypes(function allTypesObserver(types) {
             if (types) {
                 $scope.calculatorTypes = types;
             }
@@ -30,12 +31,31 @@
             }
         });
 
-        OperatorsStore.get().getAllOperators(function(operators) {
+        // OperatorsStore.get().getAllOperators(function allOperatorsObserver(operators) {
+        //     if (operators) {
+        //         $scope.calculatorOperators = operators;
+        //     }
+        // });
+
+        OperatorsStore.get().getOperatorsByType(function getOperatorsByTypeObserver(operators) {
             debugger;
             if (operators) {
-                $scope.calculatorOperators = operators;    
+                $scope.calculatorOperators = operators;
+                $scope.currentOperation.operator = operators[0];
             }
         });
+
+        //Controller-View logic
+        $scope.saveOperation = function () {
+            if (!angular.isNumber($scope.currentOperation.leftValue)) {
+                return;
+            }
+            if (!angular.isNumber($scope.currentOperation.rightValue)) {
+                return;
+            }
+        }
+
+
     }
 
 })(Rx);
