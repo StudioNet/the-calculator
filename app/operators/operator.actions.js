@@ -10,7 +10,7 @@
         .constant('OperatorsActionsTypes', {
             GetAll: 'GET_ALL_OPERATORS',
             GetByType: 'GET_BY_TYPE',
-            ExecuteOperator: 'EXECUTE_OPERATOR'
+            GetSelectedOperator: 'GET_SELECTED_OPERATOR'
         });
 
     OperatorActionsFactory.$inject = ['BaseAction', 'OperatorsActionsTypes'];
@@ -34,11 +34,11 @@
                         this.dispatch(OperatorsActionsTypes.GetByType, calculatorType);
                     }
                 },
-                executeOperator: {
+                getSelectedOperator: {
                     configurable: false,
                     enumerable: false,
-                    value: function (operation) {
-                        this.dispatch(OperatorsActionsTypes.ExecuteOperator, operation);
+                    value: function (operatorName) {
+                        this.dispatch(OperatorsActionsTypes.GetSelectedOperator, operatorName);
                     }
                 }
             });

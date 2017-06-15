@@ -10,7 +10,7 @@
         .module('thecalculator')
         .component('operatorList', {
             template: ''
-            + '<select name=\'operatorsSelect\''
+            + '<select name=\'operatorsSelect\' ng-change=\'$ctrl.changeOperator()\''
             + '         ng-model=\'$ctrl.selectedOperator\' ng-options=\'o.symbol for o in $ctrl.operators\''
             + '         class=\'form-control\'>'
             + '</select>',
@@ -21,12 +21,16 @@
             }
         });
 
-    OperatorListController.$inject = [];
-    function OperatorListController() {
+    OperatorListController.$inject = ['OperatorActions'];
+    function OperatorListController(OperatorActions) {
         var $ctrl = this;
 
         function updateViewState(operators) {
             $ctrl.selectedOperator = operators[0];
+        }
+
+        $ctrl.changeOperator = function () {
+            OperatorActions.get().getSelectedOperator($ctrl.selectedOperator.name);
         }
 
         $ctrl.$onInit = function () {

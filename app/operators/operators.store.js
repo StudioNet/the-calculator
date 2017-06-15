@@ -25,6 +25,7 @@
         };
 
         function OperatorsStore() {
+            //creating concrete operators store with base prototype
             var store = BaseStore.create(initialState, OperatorActions.get());
 
             function allOperators(storeFunc, consumerFunc) {
@@ -60,6 +61,22 @@
                 });
             }
 
+            function selectedOperator(payload, consumerFunc) {
+                var currentState = rx.Observable.of(store.state);
+                var operators = null;
+                currentState.map(function (state) {
+                    return state.standard.concat(state.scientific).concat(state.programmer);
+                }).subscribe(function (payload) {
+                    operators = payload;
+                });
+
+                var op = operators.filter(function (it, idx) {
+                    return it.name === payload.data;
+                });
+
+                consumerFunc(op[0]);
+            }
+
             return Object.create(store, {
                 getAllOperators: {
                     configurable: false,
@@ -84,11 +101,18 @@
                          */
                         this.attachAction(OperatorsActionsTypes.GetByType, operatorsByType.bind(store), store, consumer);
                     }
+                },
+                getSelectedOperator: {
+                    configurable: false,
+                    enumerable: false,
+                    value: function (consumer) {
+                        this.attachAction(OperatorsActionsTypes.GetSelectedOperator, selectedOperator.bind(store), store, consumer);
+                    }
                 }
             });
         }
 
-        //Always only onse instance of concrete store
+        //Always only one instance of concrete store
         var singleton = new OperatorsStore();
 
         return {

@@ -30,21 +30,37 @@
                 <div class="col-md-12">
                     <form class="form-inline calc-form">
                         <div class="form-group">
-                            <input type="text" id="leftOperand" class="form-control" ng-model="currentOperation.leftValue" />
+                            <input type="text" id="leftOperand" class="form-control" ng-blur="executeOperation()" ng-model="currentOperation.leftValue"
+                            />
                         </div>
                         <div class="form-group">
                             <operator-list operators="calculatorOperators"></operator-list>
                         </div>
                         <div class="form-group">
-                            <input type="text" id="rightOperand" class="form-control" ng-model="currentOperation.rightValue" />
+                            <input type="text" id="rightOperand" class="form-control" ng-blur="executeOperation()" ng-model="currentOperation.rightValue"
+                            />
                         </div>
                         <div class="form-group">
-                            = <span id="txtResult" class="form-control" ng-model="currentOperation.result"></span>
+                            = <span id="txtResult" class="form-control" ng-bind="currentOperation.operationResult"></span>
                         </div>
-                        <div>
-                            <input type="button" value="Save operation" ng-click="saveOperation()" />
+                        <div class="form-group">
+                            <input type="button" class="btn btn-default" style="width:50px" value="Log" ng-click="saveOperation()" />
                         </div>
                     </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <hr />
+                    <div class="pull-right undo-redo-segment">
+                        <span class="glyphicon glyphicon-menu-left" aria-hidden="true" ng-click="undo()"></span>
+                        <span class="glyphicon glyphicon-menu-right" aria-hidden="true" ng-click="redo()"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <operations-log operations="savedOperations"></operations-log>
                 </div>
             </div>
         </div>

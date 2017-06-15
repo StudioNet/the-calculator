@@ -120,7 +120,7 @@ gulp.task('build:dev', function (done) {
         done);
 });
 
-gulp.task('watch', ['watch:index', 'watch:appjs', 'watch:css']);
+gulp.task('watch', ['watch:index', 'watch:appjs', 'watch:css', 'compile:index']);
 
 gulp.task('serve:dev', ['build:dev', 'watch'], function () {
     gulp.src(appConfig.build.path)

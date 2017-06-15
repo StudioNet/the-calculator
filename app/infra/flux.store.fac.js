@@ -18,20 +18,22 @@
             var subscriptions = {};
 
             function undo() {
+                //debugger;
                 if (historyDeep > 0) {
                     historyDeep--;
                 }
-                if (storeState !== storeHistory[historyDeep]) {
+                if (storeState != storeHistory[historyDeep]) {
                     storeState = storeHistory[historyDeep];
                     store.next(storeState);
                 }
             }
 
             function redo() {
+                //debugger;
                 if (historyDeep < storeHistory.length - 1) {
                     historyDeep++;
                 }
-                if (storeState !== storeHistory[historyDeep]) {
+                if (storeState != storeHistory[historyDeep]) {
                     storeState = storeHistory[historyDeep];
                     store.next(storeState);
                 }
@@ -45,28 +47,28 @@
                         return store.getValue();
                     }
                 },
-                init: {
-                    configurable: false,
-                    value: function () {
-                        //store.subscribe(defaultActions);
-                        this.stateChange();
-                    }
-                },
                 /**
-                 * calling to the changeState method will update 
+                 * calling to the stateChange method will update 
                  * the current state with next value parameter
                  */
                 stateChange: {
                     configurable: false,
                     value: function (nextState) {
-                        if (this.isUndoRedo) {
+                        //debugger;
+                        storeState = nextState;
+                        if (this.isUndoRedo || historyDeep < 0) {
                             historyDeep++;
                             storeHistory.push(storeState);
                         }
-                        if (angular.isDefined(nextState)) {
-                            storeState = nextState;
-                        }
                         store.next(storeState);
+                    }
+                },
+                stateReset: {
+                    configurable: false,
+                    value: function (state) {
+                        historyDeep = 0;
+                        storeState = state || storeHistory[historyDeep];
+                        this.stateChange(storeState);
                     }
                 },
                 subscribe: {
@@ -122,14 +124,16 @@
                     configurable: true,
                     enumerable: false,
                     value: function (enableFeature) {
+                        //debugger;
                         this.isUndoRedo = enableFeature;
                         if (enableFeature) {
                             if (!this.undoSubscription) {
-                                this.undoSubscription = this.attachAction("UNDO-STATE", undo.bind(this), this);
+                                this.undoSubscription = this.attachAction("UNDO_STATE", undo.bind(this), this);
                             }
                             if (!this.redoSubscription) {
-                                this.redoSubscription = this.attachAction('REDO-STATE', redo.bind(this), this);
+                                this.redoSubscription = this.attachAction('REDO_STATE', redo.bind(this), this);
                             }
+                            this.stateChange(storeData);
                         }
                         else {
                             if (this.undoSubscription) {
